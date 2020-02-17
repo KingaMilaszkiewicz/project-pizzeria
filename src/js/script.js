@@ -33,7 +33,7 @@
     },
   };
 
-  const classNames = {
+  /*const classNames = {
     menuProduct: {
       wrapperActive: 'active',
       imageVisible: 'active',
@@ -46,7 +46,7 @@
       defaultMin: 1,
       defaultMax: 9,
     }
-  };
+  }; */
 
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
@@ -88,7 +88,7 @@
         /* prevent default action for event */
         event.preventDefault();
         /* toggle active class on element of thisProduct */
-        thisProduct.element.classList.toggle("active");
+        thisProduct.element.classList.toggle('active');
         /* find all active products */
         const activeProducts = document.querySelectorAll(select.all.menuProductsActive);
         /* START LOOP: for each active product */
