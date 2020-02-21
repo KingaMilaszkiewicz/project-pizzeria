@@ -354,7 +354,6 @@
       });
 
       thisCart.dom.form.addEventListener('submit', function(event){
-        console.log('REEE');
         event.preventDefault();
         thisCart.sendOrder();
       });
