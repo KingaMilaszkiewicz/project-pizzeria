@@ -23,10 +23,7 @@ export class Cart{
     thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
     thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
 
-    thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
-    thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
-
-    thisCart.renderTotalsKeys = ['totalNumber', 'totalPrice', 'subtotalPrice', 'deliveryFee'];
+    thisCart.renderTotalsKeys = ['totalNumber', 'totalPrice', 'subtotalPrice', 'deliveryFee', 'phone', 'address'];
 
     for(let key of thisCart.renderTotalsKeys){
       thisCart.dom[key] = thisCart.dom.wrapper.querySelectorAll(select.cart[key]);
@@ -52,7 +49,6 @@ export class Cart{
       event.preventDefault();
       thisCart.sendOrder();
     });
-    //console.log(thisCart.dom.productList);
   }
 
   sendOrder(){
@@ -60,13 +56,16 @@ export class Cart{
 
     const url = settings.db.url + '/' + settings.db.order;
 
+    console.log(thisCart.dom.totalNumber);
+    
+
     const payload = {
-      totalNumber: thisCart.renderTotalsKeys['totalNumber'],
-      subtotalPrice: thisCart.renderTotalsKeys['subtotalPrice'],
-      totalPrice: thisCart.renderTotalsKeys['totalPrice'],
-      deliveryFee: thisCart.renderTotalsKeys['deliveryFee'],
-      phone: thisCart.dom.phone,
-      address: thisCart.dom.address,
+      totalNumber: thisCart.dom['totalNumber'][0].innerHTML,
+      subtotalPrice: thisCart.dom['subtotalPrice'][0].innerHTML,
+      totalPrice: thisCart.dom['totalPrice'][0].innerHTML,
+      deliveryFee: thisCart.dom['deliveryFee'][0].innerHTML,
+      phone: thisCart.dom['phone'][0].value,
+      address: thisCart.dom['address'][0].value,
 
       products: [],
     };
@@ -74,6 +73,9 @@ export class Cart{
     for(let product of thisCart.products){
       payload.products.push(product.getData());
     }
+
+    console.log(payload);
+    
 
     const options = {
       method: 'POST',

@@ -4,9 +4,8 @@ import {BaseWidget} from './BaseWidget.js';
 export class AmountWidget extends BaseWidget{
   constructor(wrapper){
     super(wrapper, settings.amountWidget.defaultValue);
-
     const thisWidget = this;
-
+    
     thisWidget.getElements();
     thisWidget.initActions();
   }
@@ -29,21 +28,21 @@ export class AmountWidget extends BaseWidget{
     const thisWidget = this;
 
     thisWidget.dom.input.addEventListener('change', function(){
-      thisWidget.value = thisWidget.dom.input.value;
+      thisWidget.value = thisWidget.dom.input.value;      
     });
     thisWidget.dom.linkDecrease.addEventListener('click', function(){
       event.preventDefault();
-      thisWidget.value = thisWidget.dom.value--;
+      thisWidget.value = --thisWidget.dom.input.value;
+      
     });
     thisWidget.dom.linkIncrease.addEventListener('click', function(){
       event.preventDefault();
-      thisWidget.value = thisWidget.dom.value++;
+      thisWidget.value = ++thisWidget.dom.input.value;
     });
   }
 
   renderValue(){
     const thisWidget = this;
-
     thisWidget.dom.input.value = thisWidget.value;
   }
 }
