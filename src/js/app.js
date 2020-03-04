@@ -17,7 +17,7 @@ const app = {
     /* find reservation widget container */
     thisApp.booking = document.querySelector(select.containerOf.booking);
     /* create new Booking class instance */
-    const bookingObj = new Booking(thisApp.booking);
+    const bookingObj = new Booking(thisApp.booking); // eslint-disable-line
   },
 
   initPages: function () {
