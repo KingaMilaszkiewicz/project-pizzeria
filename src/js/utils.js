@@ -62,7 +62,9 @@ utils.hourToNumber = function (hour) {
 };
 
 utils.dateToStr = function (dateObj) {
-  return dateObj.toISOString().slice(0, 10);
+  const date = new Date(dateObj); // adding one hour because toISOString brings it back to UTC
+  date.setHours(date.getHours() + 1);
+  return date.toISOString().slice(0, 10);
 };
 
 utils.addDays = function (dateStr, days) {

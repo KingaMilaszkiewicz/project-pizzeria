@@ -37,9 +37,9 @@ export class BaseWidget{
   }
 
   renderValue(){
-    const thisWidget = this;
+    const thisWidget = this; // eslint-disable-line
 
-    console.log('widget value: ', thisWidget.value);
+    //console.log('widget value: ', thisWidget.value);
   }
 
   announce(){
