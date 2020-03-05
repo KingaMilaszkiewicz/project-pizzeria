@@ -1,5 +1,5 @@
-import { BaseWidget } from "./BaseWidget.js";
-import { utils } from "../utils.js";
+import { BaseWidget } from './BaseWidget.js';
+import { utils } from '../utils.js';
 import {select, settings} from '../settings.js';
 
 export class HourPicker extends BaseWidget{
@@ -17,11 +17,9 @@ export class HourPicker extends BaseWidget{
   initPlugin(){
     const thisWidget = this;
 
-    rangeSlider.create(thisWidget.dom.input);
+    rangeSlider.create(thisWidget.dom.input); // eslint-disable-line
     thisWidget.dom.input.addEventListener('input', function(){
       thisWidget.value = thisWidget.dom.input.value;
-      console.log(thisWidget.value);
-      
     });
   }
 
