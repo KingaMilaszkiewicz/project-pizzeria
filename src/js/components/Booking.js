@@ -25,6 +25,10 @@ export class Booking {
     thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
+    thisBooking.dom.form = thisBooking.dom.wrapper.querySelector(select.booking.form);
+    thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector(select.booking.phone);
+    thisBooking.dom.address = thisBooking.dom.wrapper.querySelector(select.booking.address);
+    thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starter);
   }
 
   initWidgets() {
@@ -38,6 +42,70 @@ export class Booking {
     thisBooking.dom.wrapper.addEventListener('updated', function () {
       thisBooking.updateDOM();
     });
+
+    //add overlay to selected table
+    thisBooking.dom.tables.forEach(table => {
+      table.addEventListener('click', function () {
+        if (!this.classList.contains(classNames.booking.tableBooked)) {
+          thisBooking.dom.tables.forEach(chosenTable => {
+            chosenTable.classList.remove(classNames.booking.tableSelected);
+          });
+          this.classList.add(classNames.booking.tableSelected);
+        }
+      });
+    });
+
+    thisBooking.dom.form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      thisBooking.sendBooking();
+    });
+
+    /*DONE: add event listener to the tables so it selects it (need to make an overlay?)
+      DONE: if updateDOM then unselect the table
+      TODO: send the object to API
+      TODO: update the app.json with new reservation/reload the page unless can be done dynamically*/
+  }
+
+  sendBooking() {
+    const thisBooking = this;
+
+    const url = settings.db.url + '/' + settings.db.booking;
+
+    const payload = {
+      date: utils.dateToStr(thisBooking.datePicker.value),
+      hour: thisBooking.hourPicker.value,
+      table: parseInt(thisBooking.dom.wrapper.querySelector(select.booking.tablesSelected).getAttribute(settings.booking.tableIdAttribute)),
+      repeat: false,
+      duration: thisBooking.hoursAmount.value,
+      ppl: thisBooking.peopleAmount.value,
+      starters: [],
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value,
+    };
+
+    for (let starter of thisBooking.dom.starters) {
+      if (starter.checked) {
+        payload.starters.push(starter.value);
+      }
+    }
+    console.log(payload);
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    fetch(url, options)
+      .then(function (response) {
+        return response.json();
+      }).then(function (parsedResponse) {
+        console.log('parsedResponse', parsedResponse);
+        thisBooking.makeBooked(parsedResponse.date, parsedResponse.hour, parsedResponse.duration, parsedResponse.table);
+        thisBooking.updateDOM();
+      });
   }
 
   getData() {
@@ -127,12 +195,14 @@ export class Booking {
     thisBooking.date = thisBooking.datePicker.value;
     thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
 
-    if(thisBooking.date instanceof Object){ // check if date is not an object, initial date is string but after onChange turns to array with date
+    if (thisBooking.date instanceof Object) { // check if date is not an object, initial date is string but after onChange turns to array with date
       thisBooking.date = utils.dateToStr(thisBooking.date[0]);
     }
 
     for (let element of thisBooking.dom.tables) {
       const tableId = parseInt(element.getAttribute(settings.booking.tableIdAttribute));
+
+      element.classList.remove(classNames.booking.tableSelected);
 
       if (thisBooking.booked[thisBooking.date] &&
         thisBooking.booked[thisBooking.date][thisBooking.hour] &&
