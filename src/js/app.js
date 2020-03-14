@@ -1,5 +1,6 @@
 import { Product } from './components/Product.js';
 import { Booking } from './components/Booking.js';
+import { Home } from './components/Home.js';
 import { Cart } from './components/Cart.js';
 import { select, settings, classNames } from './settings.js';
 
@@ -18,6 +19,14 @@ const app = {
     thisApp.booking = document.querySelector(select.containerOf.booking);
     /* create new Booking class instance */
     const bookingObj = new Booking(thisApp.booking); // eslint-disable-line
+  },
+
+  initHome: function () {
+    const thisApp = this;
+    /* find reservation widget container */
+    thisApp.home = document.querySelector(select.containerOf.home);
+    /* create new Booking class instance */
+    const homeObj = new Home(thisApp.home); // eslint-disable-line
   },
 
   initPages: function () {
@@ -46,12 +55,39 @@ const app = {
         thisApp.activatePage(pageId);
       });
     }
+    document.querySelector(select.logo.link).addEventListener('click', function (event) {
+      const clickedElement = this;
+      event.preventDefault();
+      const pageId = clickedElement.getAttribute('href').replace('#', '');
+      thisApp.activatePage(pageId);
+    });
+
+    document.querySelectorAll(select.home.buttons).forEach(button => {
+      button.addEventListener('click', function (event) {
+        const clickedElement = this;
+        event.preventDefault();
+        const pageId = clickedElement.getAttribute('href').replace('#', '');
+        app.activatePage(pageId);
+      });
+    });
   },
 
   activatePage: function (pageId) {
     const thisApp = this;
 
     window.location.hash = '#/' + pageId;
+
+    if (pageId != 'home') { //hide and show nav
+      thisApp.navLinks.forEach(nav => {
+        nav.classList.remove(classNames.visibility.hidden);
+      });
+      document.querySelector(select.containerOf.cart).classList.remove(classNames.visibility.hidden);
+    } else {
+      thisApp.navLinks.forEach(nav => {
+        nav.classList.add(classNames.visibility.hidden);
+      });
+      document.querySelector(select.containerOf.cart).classList.add(classNames.visibility.hidden);
+    }
 
     for (let link of thisApp.navLinks) {
       link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
@@ -96,10 +132,14 @@ const app = {
   init: function () {
     const thisApp = this;
 
+
+    thisApp.initHome();
     thisApp.initPages();
     thisApp.initData();
-    thisApp.initCart();
     thisApp.initBooking();
+    thisApp.initCart();
+
+
   },
 };
 

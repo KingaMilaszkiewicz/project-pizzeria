@@ -1,9 +1,9 @@
-import {select, classNames, templates} from '../settings.js';
-import {utils} from '../utils.js';
-import {AmountWidget} from './AmountWidget.js';
+import { select, classNames, templates } from '../settings.js';
+import { utils } from '../utils.js';
+import { AmountWidget } from './AmountWidget.js';
 
-export class Product{
-  constructor(id, data){
+export class Product {
+  constructor(id, data) {
     const thisProduct = this;
 
     thisProduct.id = id;
@@ -17,7 +17,7 @@ export class Product{
     thisProduct.processOrder();
   }
 
-  renderInMenu(){
+  renderInMenu() {
     const thisProduct = this;
 
     /* generate HTML based on template */
@@ -30,7 +30,7 @@ export class Product{
     menuContainer.appendChild(thisProduct.element);
   }
 
-  getElements(){
+  getElements() {
     const thisProduct = this;
 
     thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
@@ -42,12 +42,12 @@ export class Product{
     thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
   }
 
-  initAccordion(){
+  initAccordion() {
     const thisProduct = this;
     /* find the clickable trigger (the element that should react to clicking) */
     const trigger = thisProduct.accordionTrigger;
     /* START: click event listener to trigger */
-    trigger.addEventListener('click', function(){
+    trigger.addEventListener('click', function () {
       /* prevent default action for event */
       event.preventDefault();
       /* toggle active class on element of thisProduct */
@@ -55,41 +55,41 @@ export class Product{
       /* find all active products */
       const activeProducts = document.querySelectorAll(select.all.menuProductsActive);
       /* START LOOP: for each active product */
-      for(let activeProduct of activeProducts){
+      for (let activeProduct of activeProducts) {
         /* START: if the active product isn't the element of thisProduct */
-        if(activeProduct != thisProduct.element){
+        if (activeProduct != thisProduct.element) {
           /* remove class active for the active product */
           activeProduct.classList.remove('active');
-        /* END: if the active product isn't the element of thisProduct */
+          /* END: if the active product isn't the element of thisProduct */
         }
-      /* END LOOP: for each active product */
+        /* END LOOP: for each active product */
       }
-    /* END: click event listener to trigger */
+      /* END: click event listener to trigger */
     });
   }
 
-  initOrderForm(){
+  initOrderForm() {
     const thisProduct = this;
 
-    thisProduct.form.addEventListener('submit', function(event){
+    thisProduct.form.addEventListener('submit', function (event) {
       event.preventDefault();
       thisProduct.processOrder();
     });
 
-    for(let input of thisProduct.formInputs){
-      input.addEventListener('change', function(){
+    for (let input of thisProduct.formInputs) {
+      input.addEventListener('change', function () {
         thisProduct.processOrder();
       });
     }
 
-    thisProduct.cartButton.addEventListener('click', function(event){
+    thisProduct.cartButton.addEventListener('click', function (event) {
       event.preventDefault();
       thisProduct.processOrder();
       thisProduct.addToCart();
     });
   }
 
-  processOrder(){
+  processOrder() {
     const thisProduct = this;
     /* [DONE] read all data from the form (using utils.serializeFormToObject) and save it to const formData */
     const formData = utils.serializeFormToObject(thisProduct.form);
@@ -97,45 +97,45 @@ export class Product{
     /* [DONE] set variable price to equal thisProduct.data.price */
     let price = thisProduct.data.price;
     /* START LOOP: for each paramId in thisProduct.data.params */
-    for(let paramId in thisProduct.data.params){
+    for (let paramId in thisProduct.data.params) {
       /* save the element in thisProduct.data.params with key paramId as const param */
       const param = thisProduct.data.params[paramId];
       /* START LOOP: for each optionId in param.options */
-      for(let optionId in param.options){
+      for (let optionId in param.options) {
         /* save the element in param.options with key optionId as const option */
         const option = param.options[optionId];
         /* START IF: if option is selected and option is not default */
         const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
-        if(optionSelected && !option.default){
+        if (optionSelected && !option.default) {
           /* add price of option to variable price */
           price += option.price;
-        /* END IF: if option is selected and option is not default */
-        /* START ELSE IF: if option is not selected and option is default */
+          /* END IF: if option is selected and option is not default */
+          /* START ELSE IF: if option is not selected and option is default */
         } else if (!optionSelected && option.default) {
           /* deduct price of option from price */
           price -= option.price;
-        /* END ELSE IF: if option is not selected and option is default */
+          /* END ELSE IF: if option is not selected and option is default */
         }
         const images = thisProduct.imageWrapper.querySelectorAll('.' + paramId + '-' + optionId);
-        if(optionSelected){
-          if(!thisProduct.params[paramId]){
+        if (optionSelected) {
+          if (!thisProduct.params[paramId]) {
             thisProduct.params[paramId] = {
               label: param.label,
               options: {},
             };
           }
           thisProduct.params[paramId].options[optionId] = option.label;
-          for(let image of images){
+          for (let image of images) {
             image.classList.add(classNames.menuProduct.imageVisible);
           }
-        }else {
-          for(let image of images){
+        } else {
+          for (let image of images) {
             image.classList.remove(classNames.menuProduct.imageVisible);
           }
         }
-      /* END LOOP: for each optionId in param.options */
+        /* END LOOP: for each optionId in param.options */
       }
-    /* END LOOP: for each paramId in thisProduct.data.params */
+      /* END LOOP: for each paramId in thisProduct.data.params */
     }
     /* multiply price by amount */
     thisProduct.priceSingle = price;
@@ -145,7 +145,7 @@ export class Product{
     thisProduct.priceElem.innerHTML = thisProduct.price;
   }
 
-  addToCart(){
+  addToCart() {
     const thisProduct = this;
 
     thisProduct.name = thisProduct.data.name;
@@ -160,12 +160,12 @@ export class Product{
     thisProduct.element.dispatchEvent(event);
   }
 
-  initAmountWidget(){
+  initAmountWidget() {
     const thisProduct = this;
 
     thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
 
-    thisProduct.amountWidgetElem.addEventListener('updated', function(){
+    thisProduct.amountWidgetElem.addEventListener('updated', function () {
       thisProduct.processOrder();
     });
   }

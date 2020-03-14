@@ -13,17 +13,28 @@
   display: inline-block;
   line-height: 1;
 
-  &__title {
-    margin: 0 0 $base-size 0;
-    font-size: ($base-size * 4);
-    font-family: $font-header;
-    font-weight: $font-light;
-    text-transform: uppercase;
+  a{
+    text-decoration: none;
+    color: $color-light;
 
-    span {
-      font-weight: $font-bold;
+    &:active, &:focus, &:visited {
+      outline: 0;
+      border: none;
+      -moz-outline-style: none;
     }
 
+    .logo__title {
+      margin: 0 0 $base-size 0;
+      font-size: ($base-size * 4);
+      font-family: $font-header;
+      font-weight: $font-light;
+      text-transform: uppercase;
+  
+      span {
+        font-weight: $font-bold;
+      }
+  
+    }
   }
 
   &__subtitle {
@@ -40,6 +51,7 @@
   @include flex(row, flex-start, flex-start);
   bottom: ($base-size * -8);
 
+  
   a {
     @extend .h2;
     color: $color-main;
@@ -54,7 +66,10 @@
     &.active {
       background: lighten($color-dark, 75%);
     }
-
   }
 
+}
+
+.hidden {
+  display: none;
 }

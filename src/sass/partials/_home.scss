@@ -1,0 +1,242 @@
+$color-main: #ff6b6b;
+
+.home-page {
+  margin: ($base-size * 3.5) auto;
+  padding: ($base-size * 6) ($base-size * 4);
+  background: $color-light;
+  border-bottom: 1px solid lighten($color-dark, 70%);
+  border-radius: $radius;
+}
+
+.button-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.button-section a{
+  width: 49%;
+  margin: auto;
+  height: 100px;
+  position: relative;
+  text-decoration: none;
+}
+
+.button-section a img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2% / 4%;
+}
+
+.button-section a h1 {
+  display: inline-block;
+  color: white;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s;
+  font-family: $font-header;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.button-section a h3 {
+  position: absolute;
+  display: inline-block;
+  visibility: hidden;
+  color: white;
+  text-align: center;
+  top: 100%;
+  left: 50%;
+  font-size: 12px;
+  transform: translate(-50%, 0);
+  width: 100%;
+  transition: all 0s;
+}
+
+.button-section a:hover h1 {
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+}
+
+.button-section a:hover h3 {
+  visibility: visible;
+  top: 60%;
+  transform: translate(-50%, -40%);
+  transition: all 0.3s;
+}
+
+.opening-hours {
+  background-color: $color-main;
+  color: white;
+  width: 100%;
+  text-align: center;
+  margin: 4px 3px 3px 3px;
+  border-radius: 1% / 5%;
+  z-index: 0;
+}
+
+.opening-hours h1 {
+  font-family: $font-header;
+  margin-top: 24px;
+  margin-bottom: 0;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.opening-hours h3 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+/* CAROUSEL */
+
+.carousel {
+  margin: 100px 0 150px 0;
+}
+
+.carousel-indicators {
+  bottom: -80px;
+}
+
+.carousel-indicators li{
+  background-color: black;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 7px;
+}
+
+.carousel-img {
+  width: 32%;
+  float: left;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 2%;
+}
+
+.carousel-review{
+  width: 64%;
+  height: 200px;
+  float: left;
+}
+
+.carousel-review * {
+  margin-left: 10%;
+}
+
+.carousel-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 180px;
+  min-width: 180px;
+}
+
+.carousel-review h3 {
+  margin-top: 6%;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.carousel-review p {
+  font-size: 12px;
+}
+
+.signature {
+  font-style: italic;
+}
+
+/* GALLERY */
+
+.gallery-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gallery-item {
+  position: relative;
+  margin: 5px;
+  flex: 0 0 30%;
+  min-width: 30%;
+  text-align: center;
+  overflow: hidden;
+  border-radius: 2%;
+}
+
+.gallery-item img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-height: 180px;
+  min-height: 180px;
+}
+
+.gallery-item:after {
+  position: absolute;
+  display: block;
+  content: '';
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0;
+  z-index: 1;
+}
+
+.gallery-item figcaption {
+  position: absolute;
+  display: block;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 25px;
+  color: #fff;
+  opacity: 0;
+  z-index: 2;
+}
+
+.gallery-item:hover figcaption {
+  transition: opacity 0.3s;
+  opacity: 1;
+}
+
+.gallery-item:hover:after {
+  transition: opacity 0.3s;
+  opacity: 0.3;
+}
+
+.gallery-item figcaption a {
+  color: white;
+  transition: all 0.3s;
+}
+
+.gallery-item figcaption a:hover {
+  color: $color-main;
+  transition: all 0.3s;
+}
+
+/* FOOTER */
+
+footer {
+  margin-top: 30px;
+}
+
+footer a {
+  color: $color-main;
+  text-decoration: underline;
+  font-size: 14px;
+}
