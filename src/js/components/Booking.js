@@ -59,11 +59,6 @@ export class Booking {
       event.preventDefault();
       thisBooking.sendBooking();
     });
-
-    /*DONE: add event listener to the tables so it selects it (need to make an overlay?)
-      DONE: if updateDOM then unselect the table
-      TODO: send the object to API
-      TODO: update the app.json with new reservation/reload the page unless can be done dynamically*/
   }
 
   sendBooking() {
@@ -199,6 +194,63 @@ export class Booking {
       thisBooking.date = utils.dateToStr(thisBooking.date[0]);
     }
 
+    const hourPickerInput = thisBooking.dom.hourPicker.getElementsByTagName('input')[0];
+    const maxTables = 3;
+    const minTime = parseFloat(hourPickerInput.getAttribute('min'));
+    const maxTime = parseFloat(hourPickerInput.getAttribute('max'));
+    const step = parseFloat(hourPickerInput.getAttribute('step'));
+    let lastTime = minTime;
+    let currentValue;
+    let parsedValues = [];
+
+    if(thisBooking.booked[thisBooking.date] && thisBooking.booked[thisBooking.date][minTime]){
+      currentValue = maxTables - thisBooking.booked[thisBooking.date][minTime].length;
+    }else{
+      currentValue = 3;
+    }
+
+
+    for(let time = minTime + step; time <= maxTime; time += step){
+      if(thisBooking.booked[thisBooking.date] && thisBooking.booked[thisBooking.date][time]){
+        let len = new Set(thisBooking.booked[thisBooking.date][time]).size;
+        if(currentValue != maxTables - len){
+          parsedValues.push({
+            duration: (time - lastTime)/step,
+            value: currentValue,
+          });
+          currentValue = maxTables - len;
+          lastTime = time;
+        }
+      } else {
+        if(currentValue != 3){
+          parsedValues.push({
+            duration: (time - lastTime)/step,
+            value: currentValue,
+          });
+          currentValue = 3;
+          lastTime = time;
+        }
+      }
+    }
+    parsedValues.push({
+      duration: (maxTime - lastTime)/step,
+      value: currentValue,
+    });
+
+    const threeColor = "green";
+    const oneColor = "orange";
+    const zeroColor = "red";
+    const colors = [zeroColor, oneColor, threeColor, threeColor];
+    let gradientString = "background: linear-gradient(to right";
+    let currentPercentage = 0.0;
+
+    for(let value of parsedValues){
+      gradientString += ', ' + colors[value.value] + ' ' + currentPercentage + '%, ' + colors[value.value] + ' ' + (currentPercentage += value.duration * (100/((maxTime - minTime) / step))) + '%';
+    }
+    gradientString += ');';
+
+    thisBooking.dom.hourPicker.getElementsByClassName("rangeSlider")[0].style = gradientString;
+    
     for (let element of thisBooking.dom.tables) {
       const tableId = parseInt(element.getAttribute(settings.booking.tableIdAttribute));
 
