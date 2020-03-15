@@ -237,11 +237,11 @@ export class Booking {
       value: currentValue,
     });
 
-    const threeColor = "green";
-    const oneColor = "orange";
-    const zeroColor = "red";
+    const threeColor = 'green';
+    const oneColor = 'orange';
+    const zeroColor = 'red';
     const colors = [zeroColor, oneColor, threeColor, threeColor];
-    let gradientString = "background: linear-gradient(to right";
+    let gradientString = 'background: linear-gradient(to right';
     let currentPercentage = 0.0;
 
     for(let value of parsedValues){
@@ -249,7 +249,7 @@ export class Booking {
     }
     gradientString += ');';
 
-    thisBooking.dom.hourPicker.getElementsByClassName("rangeSlider")[0].style = gradientString;
+    thisBooking.dom.hourPicker.getElementsByClassName('rangeSlider')[0].style = gradientString;
     
     for (let element of thisBooking.dom.tables) {
       const tableId = parseInt(element.getAttribute(settings.booking.tableIdAttribute));
